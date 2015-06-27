@@ -13,8 +13,9 @@ build
 .gradle
 .idea
 .idea/*
-*/.idea/*
+*/.idea/*.*
 **/*.iml
+**/.idea/*.*
 .idea/scopes
 .idea/workspace.xml
 .idea/dictionaries/*
