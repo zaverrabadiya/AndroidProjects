@@ -16,3 +16,4 @@ build
 .idea/scopes
 .idea/workspace.xml
 .idea/dictionaries/*
+*/idea/*.*
