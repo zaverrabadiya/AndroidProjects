@@ -6,6 +6,7 @@ gradle.properties
 **/lint-report*
 **/local.properties
 *.iml
+GeoQuiz/app/*.iml
 /thirdparty
 **/*.iml
 out
@@ -16,4 +17,4 @@ build
 .idea/scopes
 .idea/workspace.xml
 .idea/dictionaries/*
-*/idea/*.*
+**/.idea/*.*
