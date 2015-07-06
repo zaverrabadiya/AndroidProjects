@@ -14,12 +14,14 @@ import android.widget.TextView;
 public class CheatActivity extends ActionBarActivity {
 
     private boolean mAnswerIsTrue;
+    private boolean mIsAnswerShown;
 
     private TextView mAnswerTextView;
     private Button mShowAnswer;
 
     private static final String EXTRA_ANSWER_IS_TRUE = "com.example.zavrab.geoquiz.answer_is_true";
     private static final String EXTRA_ANSWER_SHOWN = "com.example.zavrab.geoquiz.answer_shown";
+    private static final String KEY_ANSWERSHOWN = "answerShown";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,13 +35,23 @@ public class CheatActivity extends ActionBarActivity {
         mShowAnswer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mAnswerIsTrue)
-                    mAnswerTextView.setText(R.string.true_button);
-                else
-                    mAnswerTextView.setText(R.string.false_button);
-                setAnswerShownResult(true);
+                mIsAnswerShown = true;
+                updateAnswer();
+                setAnswerShownResult();
             }
         });
+
+        if(savedInstanceState != null) {
+            mIsAnswerShown = savedInstanceState.getBoolean(KEY_ANSWERSHOWN);
+        }
+        updateAnswer();
+        setAnswerShownResult();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        savedInstanceState.putBoolean(KEY_ANSWERSHOWN, mIsAnswerShown);
     }
 
     public static Intent newIntent(Context packageContext, boolean answerIsTrue) {
@@ -48,13 +60,22 @@ public class CheatActivity extends ActionBarActivity {
         return  i;
     }
 
-    private void setAnswerShownResult(boolean isAnswerShown) {
+    private void setAnswerShownResult() {
         Intent data = new Intent();
-        data.putExtra(EXTRA_ANSWER_SHOWN, isAnswerShown);
+        data.putExtra(EXTRA_ANSWER_SHOWN, mIsAnswerShown);
         setResult(RESULT_OK, data);
     }
 
-    private static boolean wasAnswerShown(Intent result) {
+    public static boolean wasAnswerShown(Intent result) {
         return result.getBooleanExtra(EXTRA_ANSWER_SHOWN, false);
+    }
+
+    private void updateAnswer() {
+        if(mIsAnswerShown) {
+            if (mAnswerIsTrue)
+                mAnswerTextView.setText(R.string.true_button);
+            else
+                mAnswerTextView.setText(R.string.false_button);
+        }
     }
 }
