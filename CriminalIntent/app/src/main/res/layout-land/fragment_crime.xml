@@ -40,6 +40,15 @@
             android:layout_height="wrap_content"
             android:text="@string/crime_solved_label"
             android:layout_weight="1"/>
+
     </LinearLayout>
+
+    <Button
+        android:id="@+id/crime_delete"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/crime_delete_text"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"/>
 
 </LinearLayout>

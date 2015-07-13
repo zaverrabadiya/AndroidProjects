@@ -1,5 +1,7 @@
 package com.example.zavrab.criminalintent;
 
+import android.text.format.DateFormat;
+
 import java.util.Date;
 import java.util.UUID;
 
@@ -12,6 +14,7 @@ public class Crime {
     private String mTitle;
     private Date mDate;
     private boolean mSolved;
+    private String mDateString;
 
     public Crime() {
         //Generate unique identifier
@@ -47,4 +50,5 @@ public class Crime {
         mSolved = solved;
     }
 
+    public String getDateString () { return new DateFormat().format("EEEE, MMM dd, yyyy", mDate).toString(); }
 }

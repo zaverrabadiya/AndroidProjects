@@ -10,14 +10,14 @@
         <activity android:name=".CrimeListActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
         <activity
             android:name=".CrimePagerActivity"
-            android:label="@string/title_activity_crime_pager" >
+            android:label="@string/title_activity_crime_pager"
+            android:parentActivityName=".CrimeListActivity">
         </activity>
     </application>
 
