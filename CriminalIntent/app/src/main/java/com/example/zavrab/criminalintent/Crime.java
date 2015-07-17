@@ -15,6 +15,7 @@ public class Crime {
     private Date mDate;
     private boolean mSolved;
     private String mDateString;
+    private String mSuspect;
 
     public Crime() {
         //Generate unique identifier
@@ -55,5 +56,15 @@ public class Crime {
         mSolved = solved;
     }
 
-    public String getDateString () { return new DateFormat().format("EEEE, MMM dd, yyyy", mDate).toString(); }
+    public String getDateString () {
+        return new DateFormat().format("EEEE, MMM dd, yyyy", mDate).toString();
+    }
+
+    public void setSuspect(String suspect) {
+        mSuspect = suspect;
+    }
+
+    public String getSuspect() {
+        return mSuspect;
+    }
 }

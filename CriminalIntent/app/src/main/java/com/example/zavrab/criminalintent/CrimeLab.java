@@ -16,6 +16,7 @@ import java.util.UUID;
 
 import static com.example.zavrab.criminalintent.database.CrimeDbSchema.CrimeTable.Cols.DATE;
 import static com.example.zavrab.criminalintent.database.CrimeDbSchema.CrimeTable.Cols.SOLVED;
+import static com.example.zavrab.criminalintent.database.CrimeDbSchema.CrimeTable.Cols.SUSPECT;
 import static com.example.zavrab.criminalintent.database.CrimeDbSchema.CrimeTable.Cols.TITLE;
 import static com.example.zavrab.criminalintent.database.CrimeDbSchema.CrimeTable.Cols.UUID;
 
@@ -104,6 +105,7 @@ public class CrimeLab {
         values.put(TITLE, crime.getTitle());
         values.put(DATE, crime.getDate().toString());
         values.put(SOLVED, crime.isSolved() ? 1 : 0);
+        values.put(SUSPECT, crime.getSuspect());
 
         return values;
     }
