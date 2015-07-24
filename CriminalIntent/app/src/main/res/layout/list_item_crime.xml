@@ -1,32 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    card_view:cardCornerRadius="5dp"
+    android:layout_marginStart="4dp"
+    android:layout_marginEnd="4dp"
+    android:layout_marginTop="2dp"
+    android:layout_marginBottom="2dp">
 
-    <CheckBox
-        android:id="@+id/list_item_crime_solved_check_box"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:padding="4dp"/>
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    xmlns:tools="http://schemas.android.com/tools"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#ffd4ffea">
 
-    <TextView
-        android:id="@+id/list_item_crime_title_text_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_toLeftOf="@id/list_item_crime_solved_check_box"
-        android:textStyle="bold"
-        android:padding="4dp"
-        tools:text="Crime Title"/>
+        <CheckBox
+            android:id="@+id/list_item_crime_solved_check_box"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:padding="4dp"/>
 
-    <TextView
-        android:id="@+id/list_item_crime_date_text_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_toLeftOf="@id/list_item_crime_solved_check_box"
-        android:layout_below="@id/list_item_crime_title_text_view"
-        android:padding="4dp"
-        tools:text="Crime Date"/>
+        <TextView
+            android:id="@+id/list_item_crime_title_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@id/list_item_crime_solved_check_box"
+            android:textStyle="bold"
+            android:padding="4dp"
+            tools:text="Crime Title"/>
 
-</RelativeLayout>
+        <TextView
+            android:id="@+id/list_item_crime_date_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@id/list_item_crime_solved_check_box"
+            android:layout_below="@id/list_item_crime_title_text_view"
+            android:padding="4dp"
+            tools:text="Crime Date"/>
+
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>

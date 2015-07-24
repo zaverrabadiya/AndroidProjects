@@ -4,12 +4,15 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Environment;
 
 import com.example.zavrab.criminalintent.database.CrimeBaseHelper;
 import com.example.zavrab.criminalintent.database.CrimeCursorWrapper;
 import com.example.zavrab.criminalintent.database.CrimeDbSchema;
 import com.example.zavrab.criminalintent.database.CrimeDbSchema.CrimeTable;
 
+import java.io.File;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -87,7 +90,7 @@ public class CrimeLab {
     public void removeCrime(UUID id) {
         String uuidString = id.toString();
 
-        mDatabase.delete(CrimeTable.NAME, UUID + " = ?", new String[] {uuidString});
+        mDatabase.delete(CrimeTable.NAME, UUID + " = ?", new String[]{uuidString});
     }
 
     public void updateCrime(Crime c) {
@@ -95,8 +98,18 @@ public class CrimeLab {
         ContentValues values = getContentValues(c);
 
         mDatabase.update(CrimeTable.NAME, values, CrimeTable.Cols.UUID + " = ?",
-                new String[] {uuidString});
+                new String[]{uuidString});
 
+    }
+
+    public File getPhotoFile(Crime crime) {
+        File externalFilesDir = mContext.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+
+        if(externalFilesDir == null) {
+            return null;
+        }
+
+        return new File(externalFilesDir, crime.getPhotoFilename());
     }
 
     private static ContentValues getContentValues(Crime crime) {
