@@ -13,7 +13,7 @@ import android.widget.ImageView;
 import com.example.zavrab.criminalintent.Utils.PictureUtils;
 
 /**
- * Created by zaver on 8/9/15.
+ * Created by Zaver on 8/9/15.
  */
 public class PhotoViewerFragment extends DialogFragment {
 

@@ -17,8 +17,12 @@ import android.view.MenuItem;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Created by Zaver on 8/9/15.
+ */
 
-public class CrimePagerActivity extends AppCompatActivity {
+public class CrimePagerActivity extends AppCompatActivity
+                implements CrimeFragment.Callbacks {
 
     private ViewPager mViewPager;
     private List<Crime> mCrimes;
@@ -62,5 +66,10 @@ public class CrimePagerActivity extends AppCompatActivity {
         Intent intent = new Intent(packageContext, CrimePagerActivity.class);
         intent.putExtra(EXTRA_CRIME_ID, crimeId);
         return intent;
+    }
+
+    @Override
+    public void onCrimeUpdated(Crime crime) {
+
     }
 }

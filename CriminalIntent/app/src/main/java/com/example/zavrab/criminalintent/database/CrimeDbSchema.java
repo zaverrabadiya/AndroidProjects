@@ -1,7 +1,7 @@
 package com.example.zavrab.criminalintent.database;
 
 /**
- * Created by zaver on 7/14/15.
+ * Created by Zaver on 7/14/15.
  */
 public class CrimeDbSchema {
 

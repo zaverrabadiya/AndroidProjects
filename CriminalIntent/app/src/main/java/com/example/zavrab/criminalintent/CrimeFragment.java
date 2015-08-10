@@ -34,12 +34,13 @@ import java.util.Date;
 import java.util.UUID;
 
 /**
- * Created by zavrab on 7/7/15.
+ * Created by Zaver on 7/7/15.
  */
 public class CrimeFragment extends Fragment {
 
     private Crime mCrime;
     private File mPhotoFile;
+    private Callbacks mCallbacks;
 
     private EditText mTitleField;
     private Button mDateButton;
@@ -65,6 +66,12 @@ public class CrimeFragment extends Fragment {
         CrimeFragment crimeFragment = new CrimeFragment();
         crimeFragment.setArguments(args);
         return crimeFragment;
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        mCallbacks = (Callbacks) activity;
     }
 
     @Override
@@ -96,6 +103,7 @@ public class CrimeFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 mCrime.setTitle(charSequence.toString());
+                updateCrime();
             }
 
             @Override
@@ -123,6 +131,7 @@ public class CrimeFragment extends Fragment {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 //Set the crime's solved property
                 mCrime.setSolved(isChecked);
+                updateCrime();
             }
         });
 
@@ -217,6 +226,7 @@ public class CrimeFragment extends Fragment {
         if(requestCode == REQUEST_DATE) {
             Date date = (Date) data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
             mCrime.setDate(date);
+            updateCrime();
             updateDate();
         } else if(requestCode == REQUEST_CONTACT && data != null) {
             Uri contactUri = data.getData();
@@ -237,11 +247,13 @@ public class CrimeFragment extends Fragment {
                 c.moveToFirst();
                 String suspect = c.getString(0);
                 mCrime.setSuspect(suspect);
+                updateCrime();
                 mSuspectButton.setText(suspect);
             } finally {
                 c.close();
             }
         } else if (requestCode == REQUEST_PHOTO) {
+            updateCrime();
             updatePhotoView();
         }
     }
@@ -283,6 +295,10 @@ public class CrimeFragment extends Fragment {
         }
     }
 
+    private void updateCrime() {
+        CrimeLab.get(getActivity()).updateCrime(mCrime);
+        mCallbacks.onCrimeUpdated(mCrime);
+    }
     @Override
     public void onStart() {
         super.onStart();
@@ -312,5 +328,17 @@ public class CrimeFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         Log.d(TAG, "onDestroy() called");
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mCallbacks = null;
+    }
+    /*
+    * Required interface for hosting activities.
+    * */
+    public interface Callbacks {
+        void onCrimeUpdated(Crime crime);
     }
 }

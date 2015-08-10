@@ -23,7 +23,7 @@ import android.widget.Toast;
 import java.util.List;
 
 /**
- * Created by zavrab on 7/8/15.
+ * Created by Zaver on 7/8/15.
  */
 public class CrimeListFragment extends Fragment {
 
@@ -122,7 +122,7 @@ public class CrimeListFragment extends Fragment {
         appCompatActivity.getSupportActionBar().setSubtitle(subTitle);
     }
 
-    private void updateUI() {
+    public void updateUI() {
         CrimeLab crimeLab = CrimeLab.get(getActivity());
         List<Crime> crimes = crimeLab.getCrimes();
 

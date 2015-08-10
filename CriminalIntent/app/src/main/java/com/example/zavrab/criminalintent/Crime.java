@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.UUID;
 
 /**
- * Created by zavrab on 7/7/15.
+ * Created by Zaver on 7/7/15.
  */
 public class Crime {
 

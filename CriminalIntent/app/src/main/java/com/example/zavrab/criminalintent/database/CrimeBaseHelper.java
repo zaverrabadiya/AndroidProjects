@@ -8,7 +8,7 @@ import com.example.zavrab.criminalintent.database.CrimeDbSchema.CrimeTable;
 
 
 /**
- * Created by zaver on 7/14/15.
+ * Created by Zaver on 7/14/15.
  */
 public class CrimeBaseHelper extends SQLiteOpenHelper {
 

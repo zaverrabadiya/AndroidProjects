@@ -24,7 +24,7 @@ import static com.example.zavrab.criminalintent.database.CrimeDbSchema.CrimeTabl
 import static com.example.zavrab.criminalintent.database.CrimeDbSchema.CrimeTable.Cols.UUID;
 
 /**
- * Created by zavrab on 7/8/15.
+ * Created by Zaver on 7/8/15.
  */
 public class CrimeLab {
     private static CrimeLab sCrimeLab;

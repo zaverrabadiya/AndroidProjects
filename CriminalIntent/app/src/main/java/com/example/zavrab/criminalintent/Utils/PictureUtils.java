@@ -6,7 +6,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Point;
 
 /**
- * Created by zaver on 8/9/15.
+ * Created by Zaver on 8/9/15.
  */
 public class PictureUtils {
 
