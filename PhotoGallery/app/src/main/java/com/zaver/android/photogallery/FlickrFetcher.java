@@ -3,6 +3,9 @@ package com.zaver.android.photogallery;
 import android.net.Uri;
 import android.util.Log;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import org.apache.http.client.HttpResponseException;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -54,7 +57,7 @@ public class FlickrFetcher {
         return new String(getUrlBytes(urlSpec));
     }
 
-    public List<GalleryItem> fetchItems() {
+    public List<GalleryItem> fetchItems(int pageNumber) {
 
         List<GalleryItem> items = new ArrayList<>();
         try {
@@ -65,6 +68,7 @@ public class FlickrFetcher {
                     .appendQueryParameter("format", "json")
                     .appendQueryParameter("nojsoncallback", "1")
                     .appendQueryParameter("extras", "url_s")
+                    .appendQueryParameter("page", "" + pageNumber + "")
                     .build().toString();
 
             String jsonString = getUrl(url);
@@ -92,11 +96,11 @@ public class FlickrFetcher {
             GalleryItem item = new GalleryItem();
             item.setId(photoJsonObject.getString("id"));
             item.setCaption(photoJsonObject.getString("title"));
-            String urls = photoJsonObject.getString("url_s");
+            boolean hasUrl_s = photoJsonObject.has("url_s");
 
             //Add only if item has url
-            if(urls != null && urls != "") {
-                item.setUrl(urls);
+            if(hasUrl_s) {
+                item.setUrl(photoJsonObject.getString("url_s"));
                 items.add(item);
             }
 
