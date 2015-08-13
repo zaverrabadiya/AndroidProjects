@@ -4,12 +4,18 @@ import android.net.Uri;
 import android.util.Log;
 
 import org.apache.http.client.HttpResponseException;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Zaver on 8/12/15.
@@ -48,7 +54,9 @@ public class FlickrFetcher {
         return new String(getUrlBytes(urlSpec));
     }
 
-    public void fetchItems() {
+    public List<GalleryItem> fetchItems() {
+
+        List<GalleryItem> items = new ArrayList<>();
         try {
             String url = Uri.parse("https://api.flickr.com/services/rest/")
                     .buildUpon()
@@ -61,8 +69,37 @@ public class FlickrFetcher {
 
             String jsonString = getUrl(url);
             Log.i(TAG, "Received JSON: " + jsonString);
-        } catch (IOException ioe) {
+            JSONObject jsonBody = new JSONObject(jsonString);
+            parseItems(items, jsonBody);
+        } catch (JSONException je) {
+            Log.e(TAG, "Failed to parse JSON", je);
+        }
+        catch (IOException ioe) {
             Log.e(TAG, "Failed to fetch items", ioe);
+        }
+        Log.i(TAG, "Total photos: " + items.size());
+        return items;
+    }
+
+    public void parseItems(List<GalleryItem> items, JSONObject jsonBody) throws IOException, JSONException {
+
+        JSONObject photosJsonObject = jsonBody.getJSONObject("photos");
+        JSONArray photosJsonArray = photosJsonObject.getJSONArray("photo");
+
+        for(int i = 0; i < photosJsonArray.length(); i++) {
+            JSONObject photoJsonObject = photosJsonArray.getJSONObject(i);
+
+            GalleryItem item = new GalleryItem();
+            item.setId(photoJsonObject.getString("id"));
+            item.setCaption(photoJsonObject.getString("title"));
+            String urls = photoJsonObject.getString("url_s");
+
+            //Add only if item has url
+            if(urls != null && urls != "") {
+                item.setUrl(urls);
+                items.add(item);
+            }
+
         }
     }
 }
