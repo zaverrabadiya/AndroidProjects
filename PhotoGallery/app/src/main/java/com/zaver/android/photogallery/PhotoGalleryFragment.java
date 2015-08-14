@@ -1,17 +1,24 @@
 package com.zaver.android.photogallery;
 
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 
+import com.squareup.picasso.Picasso;
+
+import java.lang.reflect.Member;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +29,7 @@ public class PhotoGalleryFragment extends Fragment {
 
     private static final String TAG = "PhotoGalleryFragment";
 
-    private RecyclerView mPhtoRecyclerView;
+    private RecyclerView mPhotoRecyclerView;
     private PhotoAdapter mPhotoAdapter;
     private List<GalleryItem> mItems = new ArrayList<>();
 
@@ -40,18 +47,19 @@ public class PhotoGalleryFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
-        new FetchItemsTask().execute();
+        setHasOptionsMenu(true);
+        updateItems();
     }
 
     @Override
     public View onCreateView(final LayoutInflater layoutInflater, ViewGroup container, Bundle savedInstanceState) {
         View view = layoutInflater.inflate(R.layout.fragment_photo_gallery, container, false);
 
-        mPhtoRecyclerView = (RecyclerView) view.findViewById(R.id.fragment_photo_gallery_recycler_view);
+        mPhotoRecyclerView = (RecyclerView) view.findViewById(R.id.fragment_photo_gallery_recycler_view);
         mGridLayoutManager = new GridLayoutManager(getActivity(), 3);
-        mPhtoRecyclerView.setLayoutManager(mGridLayoutManager);
+        mPhotoRecyclerView.setLayoutManager(mGridLayoutManager);
 
-        mPhtoRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+        mPhotoRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
@@ -61,14 +69,14 @@ public class PhotoGalleryFragment extends Fragment {
                 if (!loading && (lastVisibleItem >= totalItemCount - 1)) {
                     ++pageNumber;
                     loading = true;
-                    new FetchItemsTask().execute();
+                    updateItems();
                 }
             }
         });
-        mPhtoRecyclerView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+        mPhotoRecyclerView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                int layoutWidth = mPhtoRecyclerView.getMeasuredWidth();
+                int layoutWidth = mPhotoRecyclerView.getMeasuredWidth();
                 int columns = (int) Math.floor(layoutWidth / 350);
                 mGridLayoutManager.setSpanCount(columns);
                 mGridLayoutManager.requestLayout();
@@ -77,11 +85,39 @@ public class PhotoGalleryFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
+        super.onCreateOptionsMenu(menu, menuInflater);
+        menuInflater.inflate(R.menu.fragment_photo_gallery, menu);
+
+        MenuItem searchItem = menu.findItem(R.id.menu_item_search);
+        final SearchView searchView = (SearchView) searchItem.getActionView();
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Log.d(TAG, "QueryTextSubmit: "+ query);
+                pageNumber = 1;
+                updateItems();
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                Log.d(TAG, "QueryTextChange: " + newText);
+                return false;
+            }
+        });
+    }
+
+    private void updateItems() {
+        new FetchItemsTask().execute();
+    }
 
     private void setupAdapter() {
         if(isAdded()) {
             mPhotoAdapter = new PhotoAdapter(mItems);
-            mPhtoRecyclerView.setAdapter(mPhotoAdapter);
+            mPhotoRecyclerView.setAdapter(mPhotoAdapter);
         }
     }
 
@@ -90,7 +126,6 @@ public class PhotoGalleryFragment extends Fragment {
             mPhotoAdapter.notifyItemRangeChanged(previousTotal + 1, mItems.size());
         }
     }
-
     // *********************************************************************************************
     // ************************************** Private Classes **************************************
 
@@ -103,8 +138,12 @@ public class PhotoGalleryFragment extends Fragment {
             mItemImageView = (ImageView) itemView.findViewById(R.id.fragment_photo_gallery_image_view);
         }
 
-        public void bindDrawable(Drawable drawable) {
-            mItemImageView.setImageDrawable(drawable);
+        public void bindGalleryItem(GalleryItem galleryItem) {
+                Picasso.with(getActivity())
+                        .load(galleryItem.getUrl())
+                        .placeholder(R.drawable.butterfly)
+                        .into(mItemImageView);
+
         }
     }
 
@@ -126,8 +165,7 @@ public class PhotoGalleryFragment extends Fragment {
         @Override
         public void onBindViewHolder(PhotoHolder photoHolder, int position) {
             GalleryItem galleryItem = mGalleryItems.get(position);
-            Drawable drawable = getResources().getDrawable(R.drawable.butterfly);
-            photoHolder.bindDrawable(drawable);
+            photoHolder.bindGalleryItem(galleryItem);
         }
 
         @Override
@@ -140,7 +178,13 @@ public class PhotoGalleryFragment extends Fragment {
 
         @Override
         protected List<GalleryItem> doInBackground(Void... params) {
-            return new FlickrFetcher().fetchItems(pageNumber);
+            String query = "car";
+
+            if(query == null) {
+                return new FlickrFetcher().fetchRecentPhotos(pageNumber);
+            } else {
+                return new FlickrFetcher().searchPhotos(query, pageNumber);
+            }
         }
 
         @Override
