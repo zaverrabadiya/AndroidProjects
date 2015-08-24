@@ -61,11 +61,6 @@ public class PhotoGalleryFragment extends Fragment {
         setRetainInstance(true);
         setHasOptionsMenu(true);
         updateItems();
-
-//        Intent i = PollService.newIntent(getActivity());
-//        getActivity().startService(i);
-
-        PollService.setServiceAlarm(getActivity(), true);
     }
 
     @Override
@@ -139,15 +134,27 @@ public class PhotoGalleryFragment extends Fragment {
                 searchView.setQuery(query, false);
             }
         });
+
+        MenuItem toogleItem = menu.findItem(R.id.menu_item_toogle_polling);
+        if(PollService.isServiceAlarmOn(getActivity())) {
+            toogleItem.setTitle(R.string.stop_polling);
+        } else {
+            toogleItem.setTitle(R.string.start_polling);
+        }
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
             case R.id.menu_item_clear :
-                    QueryPreferences.setStoredQuery(getActivity(), null);
-                    updateItems();
-                    return true;
+                QueryPreferences.setStoredQuery(getActivity(), null);
+                updateItems();
+                return true;
+            case R.id.menu_item_toogle_polling:
+                boolean shouldStartAlarm = !PollService.isServiceAlarmOn(getActivity());
+                PollService.setServiceAlarm(getActivity(), shouldStartAlarm);
+                getActivity().invalidateOptionsMenu();
+                return true;
             default:
                 return super.onOptionsItemSelected(menuItem);
         }
