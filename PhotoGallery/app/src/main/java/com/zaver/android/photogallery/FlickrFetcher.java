@@ -119,7 +119,7 @@ public class FlickrFetcher {
             item.setId(photoJsonObject.getString("id"));
             item.setCaption(photoJsonObject.getString("title"));
             boolean hasUrl_s = photoJsonObject.has("url_s");
-
+            item.setmOwner(photoJsonObject.getString("owner"));
             //Add only if item has url
             if(hasUrl_s) {
                 item.setUrl(photoJsonObject.getString("url_s"));
