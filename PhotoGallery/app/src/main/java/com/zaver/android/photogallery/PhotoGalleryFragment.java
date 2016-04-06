@@ -2,17 +2,12 @@ package com.zaver.android.photogallery;
 
 import android.content.Context;
 import android.content.Intent;
-import android.inputmethodservice.Keyboard;
-import android.inputmethodservice.KeyboardView;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.Fragment;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.transition.Visibility;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -216,10 +211,12 @@ public class PhotoGalleryFragment extends VisibleFragment {
         }
 
         public void bindGalleryItem(GalleryItem galleryItem) {
-                Picasso.with(getActivity())
-                        .load(galleryItem.getUrl())
+                //Picasso.with(getActivity()).setIndicatorsEnabled(true); //Indicates image source, Network-Red, Disk-Blue, Memory-Green
+
+                Picasso.with(getActivity()).load(galleryItem.getUrl())
                         .placeholder(R.drawable.butterfly)
                         .into(mItemImageView);
+
                 mGalleryItem = galleryItem;
         }
 
